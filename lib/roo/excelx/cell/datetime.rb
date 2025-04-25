@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'date'
+require "date"
 
 module Roo
   class Excelx
@@ -37,14 +37,14 @@ module Roo
         #
         # Returns a String representation of a cell's value.
         def formatted_value
-          formatter = @format.downcase.split(' ').map do |part|
+          formatter = @format.downcase.split(" ").map do |part|
             if (parsed_format = parse_date_or_time_format(part))
               parsed_format
             else
               warn 'Unable to parse custom format. Using "YYYY-mm-dd HH:MM:SS" format.'
-              return @value.strftime('%F %T')
+              return @value.strftime("%F %T")
             end
-          end.join(' ')
+          end.join(" ")
 
           @value.strftime(formatter)
         end
@@ -67,39 +67,39 @@ module Roo
         end
 
         DATE_FORMATS = {
-          'yyyy' => '%Y',  # Year: 2000
-          'yy' => '%y',    # Year: 00
+          "yyyy" => "%Y",  # Year: 2000
+          "yy" => "%y",    # Year: 00
           # mmmmm => J-D
-          'mmmm' => '%B',  # Month: January
-          'mmm' => '%^b',   # Month: JAN
-          'mm' => '%m',    # Month: 01
-          'm' => '%-m',    # Month: 1
-          'dddd' => '%A',  # Day of the Week: Sunday
-          'ddd' => '%^a',   # Day of the Week: SUN
-          'dd' => '%d',    # Day of the Month: 01
-          'd' => '%-d'    # Day of the Month: 1
+          "mmmm" => "%B",  # Month: January
+          "mmm" => "%^b",   # Month: JAN
+          "mm" => "%m",    # Month: 01
+          "m" => "%-m",    # Month: 1
+          "dddd" => "%A",  # Day of the Week: Sunday
+          "ddd" => "%^a",   # Day of the Week: SUN
+          "dd" => "%d",    # Day of the Month: 01
+          "d" => "%-d"    # Day of the Month: 1
           # '\\\\'.freeze => ''.freeze,  # NOTE: Fixes a custom format's output.
         }
 
         TIME_FORMATS = {
-          'hh' => '%H',    # Hour (24): 01
-          'h' => '%-k',    # Hour (24): 1
+          "hh" => "%H",    # Hour (24): 01
+          "h" => "%-k",    # Hour (24): 1
           # 'hh'.freeze => '%I'.freeze,    # Hour (12): 08
           # 'h'.freeze => '%-l'.freeze,    # Hour (12): 8
-          'mm' => '%M',    # Minute: 01
+          "mm" => "%M",    # Minute: 01
           # FIXME: is this used? Seems like 'm' is used for month, not minute.
-          'm' => '%-M',    # Minute: 1
-          'ss' => '%S',    # Seconds: 01
-          's' => '%-S',    # Seconds: 1
-          'am/pm' => '%p', # Meridian: AM
-          '000' => '%3N',  # Fractional Seconds: thousandth.
-          '00' => '%2N',   # Fractional Seconds: hundredth.
-          '0' => '%1N'    # Fractional Seconds: tenths.
+          "m" => "%-M",    # Minute: 1
+          "ss" => "%S",    # Seconds: 01
+          "s" => "%-S",    # Seconds: 1
+          "am/pm" => "%p", # Meridian: AM
+          "000" => "%3N",  # Fractional Seconds: thousandth.
+          "00" => "%2N",   # Fractional Seconds: hundredth.
+          "0" => "%1N"    # Fractional Seconds: tenths.
         }
 
         def create_datetime(base_timestamp, value)
           timestamp = (base_timestamp + (value.to_f.round(6) * SECONDS_IN_DAY)).round(0)
-          defined?(ActiveSupport::TimeZone) ? ::Time.zone.at(timestamp) : ::Time.at(timestamp)
+          defined?(ActiveSupport::TimeZone) ? ::Time.zone.at(timestamp).to_datetime : ::Time.at(timestamp).to_datetime
         end
       end
     end
