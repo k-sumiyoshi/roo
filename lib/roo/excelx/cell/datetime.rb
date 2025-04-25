@@ -99,7 +99,7 @@ module Roo
 
         def create_datetime(base_timestamp, value)
           timestamp = (base_timestamp + (value.to_f.round(6) * SECONDS_IN_DAY)).round(0)
-          ::Time.at(timestamp).utc.to_datetime
+          defined?(ActiveSupport::TimeZone) ? ::Time.zone.at(timestamp) : ::Time.at(timestamp)
         end
       end
     end
